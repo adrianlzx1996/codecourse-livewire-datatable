@@ -34,7 +34,7 @@
 
 		public function builder ()
 		{
-			return $this->model::query();
+			return new $this->model;
 		}
 
 		public function deleteChecked ( $checked )
@@ -52,7 +52,13 @@
 
 		public function records ()
 		{
-			return $this->builder()->paginate($this->paginate);
+			$builder = $this->builder();
+
+			if ( $this->search ) {
+				$builder = $builder->search($this->search);
+			}
+
+			return $builder->paginate($this->paginate);
 		}
 
 		public function render ()
